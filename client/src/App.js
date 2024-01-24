@@ -1,20 +1,21 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import CurpList from './components/CurpList';
-import Form from './components/form';
-import Menu from "./components/navbar"
-import { Container } from "@mui/material"
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Form from "./components/form";
+import CurpList from "./components/CurpList";
+import Navbar from "./components/navbar";
 
-export default function App() {
+function App() {
   return (
     <BrowserRouter>
-      <Menu />
-      <Container>
+      <main className="container mx-auto px-20">
+        <Navbar />
         <Routes>
-          <Route path='/' element={<CurpList />} />
-          <Route path='/curps/nuevo' element={<Form />} />
+          <Route index path="/" element={<CurpList />} />
+          <Route path="/curp/nuevo" element={<Form />} />
+          <Route path="/curp/:id/editar" element={<Form />} />
         </Routes>
-      </Container>
+      </main>
     </BrowserRouter>
   );
 }
 
+export default App;

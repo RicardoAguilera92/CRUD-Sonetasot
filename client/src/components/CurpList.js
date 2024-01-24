@@ -1,30 +1,76 @@
-import { Button, Card, CardContent, Grid, Typography, TextField } from '@mui/material'
+import { useEffect, useState } from "react";
+import { Card, CardContent, Typography, Button} from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 export default function CurpList() {
-    return (
-        <Grid container direction="column" alignItems="center" justifyContent="center">
-            <Grid item xs={3}>
-                <Card sx={{ mt: 5 }} style={{
-                    backgroundColor: '#1e272e',
-                    padding: '1rem',
-                }}>
-                    <Typography variant='5' textAlign='center' color='white'>Agregar CURP</Typography>
-                    <CardContent>
-                        <form>
-                            <TextField variant="filled" label="CURP" sx={{ display: 'block', margin: '.5rem 0' }}
-                                inputProps={{ style: { color: "white" } }}
-                                InputLabelProps={{ style: { color: "white" } }}
-                            />
-                            <TextField variant="filled" label="Nombre" multiline rows={4} sx={{ display: 'block', margin: '.5rem 0' }}
-                                inputProps={{ style: { color: "white" } }}
-                                InputLabelProps={{ style: { color: "white" } }} />
-                            <Button variant='contained' color='primary' type='submit'>
-                                Guardar
-                            </Button>
-                        </form>
-                    </CardContent>
-                </Card>
-            </Grid>
-        </Grid>
-    );
+  const [curps, setCurps] = useState([]);
+  const navigate = useNavigate();
+
+  const loadCurps = async () => {
+    const response = await fetch("http://localhost:4000/curp");
+    const data = await response.json();
+    setCurps(data);
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await fetch(`http://localhost:4000/curp/${id}`, {
+        method: "DELETE",
+      });
+
+      setCurps(curps.filter((curp) => curp.id !== id));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    loadCurps();
+  }, []);
+
+  return (
+    <>
+      <h1> Listado de Curps</h1>
+      {curps.map((curp) => (
+        <Card
+          style={{
+            marginBottom: ".7rem",
+            backgroundColor: "#1e272e",
+          }}
+          key={curp.id}
+        >
+          <CardContent
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+          >
+            <div style={{ color: "white" }}>
+              <Typography>{curp.nombre}</Typography>
+              <Typography>{curp.curp}</Typography>
+              <Typography>{curp.fecha}</Typography>
+            </div>
+
+            <div>
+              <Button
+                variant="contained"
+                color="inherit"
+                onClick={() => navigate(`/curp/${curp.id}/editar`)}
+              >
+                Editar
+              </Button>
+              <Button
+                variant="contained"
+                color="error"
+                onClick={() => handleDelete(curp.id)}
+                style={{ marginLeft: ".5rem" }}
+              >
+                Eliminar
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      ))}
+    </>
+  );
 }

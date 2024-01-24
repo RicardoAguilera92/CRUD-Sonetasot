@@ -12,8 +12,8 @@ export default function Navbar() {
                         <Typography variant='h6' sx={{ flexGrow: 1 }}>
                             <Link to="/" style={{ TextDecoration: 'none', color: "#eee" }}>Logo</Link>
                         </Typography>
-                        <Button variant='contained' color='primary' onClick={() => navigate("/curps/nuevo")}>
-                            New CURP
+                        <Button variant='contained' color='primary' onClick={() => navigate("/curp/nuevo")}>
+                            Agregar CURP
                         </Button>
                     </Toolbar>
                 </Container>
